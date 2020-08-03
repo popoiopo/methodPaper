@@ -1,0 +1,188 @@
+% Created 2020-05-18 Mon 15:04
+% Intended LaTeX compiler: pdflatex
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage[left=1in,top=1in,right=1in,bottom=1.5in]{geometry}
+\usepackage{palatino}
+\usepackage{sectsty}
+\usepackage{engord}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage[compact]{titlesec}
+\usepackage[center]{caption}
+\usepackage{multirow}
+\usepackage{ifthen}
+\usepackage{longtable}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{pdfpages}
+\usepackage{nomencl}	% For glossary
+\usepackage{pdflscape}	% For landscape pictures and environment
+\usepackage{verbatim} 	% For multiline comment environments
+\usepackage[table]{xcolor}
+\usepackage{amssymb,amsmath}
+\usepackage{fancyhdr} %For headers and footers
+\pagestyle{fancy} %For headers and footers
+\usepackage{lastpage} %For getting page x of y
+\usepackage{float} %Allows the figures to be positioned and formatted nicely
+\floatstyle{boxed} %using this
+\restylefloat{figure} %and this command
+\usepackage{url} %Formatting of yrls
+\lhead{Paper example}
+\chead{}
+\rhead{\today}
+\lfoot{Draft}
+\cfoot{}
+\rfoot{\thepage\ of \pageref{LastPage}}
+\author{Bas Chatel}
+\date{\today}
+\title{Idea for Methodpaper example}
+\hypersetup{
+ pdfauthor={Bas Chatel},
+ pdftitle={Idea for Methodpaper example},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 26.3 (Org mode 9.3.6)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\section*{Photohabditus Aminogaster}
+\label{sec:org8160c94}
+\subsection*{Funfact}
+\label{sec:orgb04befc}
+The Photohabditus Aminogaster is named after two of the most influential animals in genetics, the Caenorhabditis Elegans and the Drosophila Melanogaster.
+
+\subsection*{Introduction of the example}
+\label{sec:org99c059b}
+Imagine a type of worm that is photosensitive for protein expression in protein X. A team of researchers are interested in how light effects not only this protein, but also it's effect on protein Y and Z through the excitatory or inhibitory effects of protein X. The causal diagram is as in figure \ref{fig:cdpa}. Here we see that protein transcription has a positive relation with light, negative with itself and Y also has a positive relation with X. X has a negative relation with Y, while Z has a positive relation with Y. Y has a negative relation with Z and so does X. In terms of functional forms, the team of experts have knowledge about most links, but not all. The equations are described as follows:
+
+\begin{align}
+    x  &= x \cdot E_{light}\\
+    dx &= y - x_{u1}\\
+    dy &= -x + \alpha z\\
+    dz &= -y - x_{u2}
+\end{align}
+
+In the equations above we see that x has an effect of light (\(E_{light}\)) so that x is multiplied by a value dependent on the absence or presence of light. Furthermore, we can see that there is an \(\alpha\) in the equation for \(dy\). This is a constant that, just as the effect of light, needs to be fitted in order to find an appropriate value. Lastly, there are two links of which the functional form is unknown or is known with a high degree of uncertainty (\(x_{u1}, x_{u2}\)). The functional forms of these links also need to be fitted. The rest of the links have a linear relationship.
+
+The goal of the researchers is to find the model that is responsible for the dynamics of the three proteins. Now that the groundwork for the conceptual model is laid, data is needed to test the model and its uncertainties. Then by testing different possibilities the real underlying system can be retrieved.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\linewidth]{tiny_model.png}
+\caption{\label{fig:cdpa}Protein transcription causal diagram of Photohabditus Aminogaster.}
+\end{figure}
+
+\subsection*{The data}
+\label{sec:orgef22d65}
+
+The scientists go on and measure transcription over time of all three proteins while introducing no light (see figure \ref{fig:nolightmv}) and with light introduction (see figure \ref{fig:proteinsmv}). The measurement method has introduced some error margin and also around 50\% of measurements are missing seem to be missing.
+
+\begin{center}
+\includegraphics[width=0.49\textwidth]{proteins_no_light_mv.png}
+\includegraphics[width=0.49\textwidth]{proteins_mv.png}
+\end{center}
+
+
+\subsection*{Fitting the functional form}
+\label{sec:orge145af9}
+
+To fit the functional form of a link between two variables one can make use of genetic programming. The idea is to define a set of possible functional forms and apply these to the network in a random way. By doing so, we can sample the possibilities and search for a best fit. In our example, the functional forms for links \(x_{u1}\) and \(x_{u2}\) are unknown. The set of possible functional forms that we will use is \{linear, quadratic, cubic, sigmoid\}. These forms are viewed in the following equations in their mathematical form. 
+
+\begin{align}
+x_u &= x\\
+&= x^2\\
+&= x^3\\
+&= \frac{x}{\sqrt{1 + x^2}}
+\end{align}
+
+The functional forms can be fitted in several ways. Genetic programming is often used for these types of problems. The idea is to create a population of different answers to the problem and check how well each answer performs. Then the answers are crossbred and mutated due to some selection processes of which the results will be the next generation of population of answers. These will again be evaluated on performance and so on until a predefined number of generations has been hit or the best answer has performed better then some minimal error that is also predefined.
+
+During each evaluation of a possible functional form, the unknown parameters need to be fitted as well. Here we can, for example, make use of simulated annealing. For simplicity, we will elaborate on the hillclimber algorithm, which is a simpler version of simulated annealing. The idea is that a random value is sampled for a parameter and then the performance is evaluated. Then the value will be nudged a bit in a random direction, and this value will be evaluated for performance as well. If the performance is better, the new value is accepted to be the better solution. Otherwise, if the new value performs worse, it is not accepted. This way, we optimize the parameter value for fitness.
+
+For example, if we take the following three sets of functional forms:
+
+\(1^{st}\):
+\begin{align}
+x_{u1} &= -x^3\\
+x_{u2} &= -\frac{x}{\sqrt{1 + x^2}}
+\end{align}
+\(2^{nd}\):
+\begin{align}
+x_{u1} &= -x\\
+x_{u2} &= -x
+\end{align}
+\(3^{rd}\):
+\begin{align}
+x_{u1} &= -\frac{x}{\sqrt{1 + x^2}}\\
+x_{u2} &= -x**3
+\end{align}
+
+These different forms have different dynamics, but still need to be fitted. In the coming figures we see these networks in the same order with the effect of light equal to the effect of dark (\(E_{light}=1\) for both light and dark). Also \(\alpha = 1\).
+
+\begin{center}
+\includegraphics[width=0.32\textwidth]{proteins_deriv1_no_fit.png}
+\includegraphics[width=0.32\textwidth]{proteins_deriv2_no_fit.png}
+\includegraphics[width=0.32\textwidth]{proteins_deriv3_no_fit.png}
+\end{center}
+
+With fitting the data we find that the optimal values for the effect of light and \(alpha\) are 1 and 0.5 for the first model, 0.7 and 0.7 for the second model and 0.6 and 0.8 for the last model. The cost function chosen here is the mean absolute error that has a value of 0, 0.37 and 0.56 respectively.
+
+\begin{center}
+\includegraphics[width=0.32\textwidth]{proteins_deriv1_hillc_no_light.png}
+\includegraphics[width=0.32\textwidth]{proteins_deriv2_hillc_no_light.png}
+\includegraphics[width=0.32\textwidth]{proteins_deriv3_hillc_no_light.png}
+\end{center}
+
+For the dark condition, it seems that the model is as follows: 
+
+\begin{align}
+    x  &= x \cdot E_{light}\\
+    dx &= y - x^3\\
+    dy &= -x + 0.5z\\
+    dz &= -y - \frac{x}{\sqrt{1 + x^2}}
+\end{align}
+
+However, we have not yet found the model in the light condition. By applying the same process for the dark condition on all three models we get the following figures.
+
+\begin{center}
+\includegraphics[width=0.32\textwidth]{proteins_deriv1_hillc_light.png}
+\includegraphics[width=0.32\textwidth]{proteins_deriv2_hillc_light.png}
+\includegraphics[width=0.32\textwidth]{proteins_deriv3_hillc_light.png}
+\end{center}
+
+Here we find that the optimal values for the light parameter and \(\alpha\) are 0.3 and 0.5 for the first model, 0.2 and 0.6 for the second model and 0.0 and 0.8 for the last model. With mean absolute error values 0.0, 0.91, and 1.22 respectively.
+
+\section*{Final model}
+\label{sec:org0fa3169}
+
+The final model of the system is as follows:
+
+\begin{align}
+    x  &= x \cdot E_{light}\\
+    dx &= y - x^3\\
+    dy &= -x + 0.5z\\
+    dz &= -y - \frac{x}{\sqrt{1 + x^2}}
+\end{align}
+
+Where \(E_{light}\) is either 1 when the lights are off, and 0.3 when they are on. Running this model provides us with the closest approximation of the data, see figures TODO.
+
+\begin{center}
+\includegraphics[width=0.49\textwidth]{proteins_no_light.png}
+\includegraphics[width=0.49\textwidth]{proteins.png}
+\end{center}
+\end{document}

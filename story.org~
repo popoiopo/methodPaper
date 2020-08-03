@@ -1,0 +1,106 @@
+#+TITLE: Idea for Methodpaper example
+#+AUTHOR: Bas Chatel
+#+email: bas.chatel@radboudumc.nl
+#+LaTeX_CLASS: article
+#+LaTeX_CLASS_OPTIONS: [a4paper]
+#+LaTeX_HEADER: \usepackage[left=1in,top=1in,right=1in,bottom=1.5in]{geometry}
+#+LaTeX_HEADER: \usepackage{palatino}
+#+LaTeX_HEADER: \usepackage{sectsty}
+#+LaTeX_HEADER: \usepackage{engord}
+#+LaTeX_HEADER: \usepackage{cite}
+#+LaTeX_HEADER: \usepackage{graphicx}
+#+LaTeX_HEADER: \usepackage{setspace}
+#+LaTeX_HEADER: \usepackage[compact]{titlesec}
+#+LaTeX_HEADER: \usepackage[center]{caption}
+#+LaTeX_HEADER: \usepackage{multirow}
+#+LaTeX_HEADER: \usepackage{ifthen}
+#+LaTeX_HEADER: \usepackage{longtable}
+#+LaTeX_HEADER: \usepackage{color}
+#+LaTeX_HEADER: \usepackage{listings}
+#+LaTeX_HEADER: \usepackage{pdfpages}
+#+LaTeX_HEADER: \usepackage{nomencl}	% For glossary
+#+LaTeX_HEADER: \usepackage{pdflscape}	% For landscape pictures and environment
+#+LaTeX_HEADER: \usepackage{verbatim} 	% For multiline comment environments
+#+LaTeX_HEADER: \usepackage[table]{xcolor}
+#+LaTeX_HEADER: \usepackage{amssymb,amsmath}
+#+LaTeX_HEADER: \usepackage{fancyhdr} %For headers and footers
+#+LaTeX_HEADER: \pagestyle{fancy} %For headers and footers
+#+LaTeX_HEADER: \usepackage{lastpage} %For getting page x of y
+#+LaTeX_HEADER: \usepackage{float} %Allows the figures to be positioned and formatted nicely
+#+LaTeX_HEADER: \floatstyle{boxed} %using this
+#+LaTeX_HEADER: \restylefloat{figure} %and this command
+#+LaTeX_HEADER: \usepackage{url} %Formatting of yrls
+#+LaTeX_HEADER: \lhead{Paper example}
+#+LaTeX_HEADER: \chead{}
+#+LaTeX_HEADER: \rhead{\today}
+#+LaTeX_HEADER: \lfoot{Draft}
+#+LaTeX_HEADER: \cfoot{}
+#+LaTeX_HEADER: \rfoot{\thepage\ of \pageref{LastPage}}
+#+OPTIONS: toc:nil num:nil
+* Photohabditus Aminogaster
+** Funfact
+The Photohabditus Aminogaster is named after two of the most influential animals in genetics, the Caenorhabditis Elegans and the Drosophila Melanogaster.
+
+** Introduction of the example
+Imagine a type of worm that is photosensitive for protein expression in protein X. A team of researchers are interested in how light effects not only this protein, but also it's effect on protein Y and Z through the excitatory effects of protein X. The causal diagram is as in figure ref:fig:cdpa. Here we see that protein transcription has a positive relation with light, negative with itself and Y also has a positive relation with X. X has a negative relation with Y, while Z has a positive relation with Y. Y has a negative relation with Z and so does X. In terms of functional forms, the team of experts have knowledge about most links, but not all. The equations are described as follows:
+
+\begin{align}
+    x  &= x \cdot E_{light}\\
+    dx &= y - x_{u1}\\
+    dy &= -x + \alpha z\\
+    dz &= -y - x_{u2}
+\end{align}
+
+In the equations above we see that x has an effect of light ($E_{light}$) so that x is multiplied by a value dependent on the absence or presence of light. Furthermore, we can see that there is an $\alpha$ in the equation for $dy$. This is a constant that, just as the effect of light, needs to be fitted in order to find an appropriate value. Lastly, there are two links of which the functional form is unknown or is known with a high degree of uncertainty ($x_{u1}, x_{u2}$). The functional forms of these links also need to be fitted. The rest of the links have a linear relationship.
+
+#+CAPTION: Protein transcription causal diagram of Photohabditus Aminogaster.
+#+NAME: fig:cdpa
+#+ATTR_LATEX: :width 0.5\linewidth
+[[file:tiny_model.png]]
+
+** The data
+
+The scientists go on and measure transcription over time of all three proteins while introducing no light (see figure ref:fig:nolightmv) and with light introduction (see figure ref:fig:proteinsmv). The measurement method has introduced some error margin and also around 50% of measurements are missing seem to be missing. The goal of 
+ 
+#+CAPTION: Protein transcriptiond data over time without light.
+#+NAME: fig:nolightmv
+[[file:proteins_no_light_mv.png]]
+
+#+CAPTION: Protein transcription data over time with light introduction at a quarter of the experiment until three quarter.
+#+NAME: fig:proteinsmv
+[[file:proteins_mv.png]]
+
+** Fitting the functional form
+
+To fit the functional form of a link between two variables one can make use of genetic programming. The idea is to define a set of possible functional forms and apply these to the network in a random way. By doing so, we can sample the possibilities and search for a best fit. In our example, the functional forms for links $x_{u1}$ and $x_{u2}$ are unknown. The set of possible functional forms that we will use is {linear, quadratic, cubic, sigmoid}. These forms are viewed in the following equations in their mathematical form. 
+
+\begin{align}
+x_u &= x\\
+&= x^2\\
+&= x^3\\
+&= \frac{x}{\sqrt{1 + x^2}}
+\end{align}
+
+
+** Final model
+
+The final model of the system is as follows:
+
+\begin{align}
+    x  &= x \cdot E_{light}\\
+    dx &= y - x^3\\
+    dy &= -x + z .5\\
+    dz &= -y - \frac{x}{\sqrt{1 + x^2}}
+\end{align}
+
+Where $E_{light}$ is either 1 when the lights are off, and 0.3 when they are on. Running this model provides us with the closest approximation of the data, see figures ref:fig:nolightfinal and ref:fig:proteinsfinal.
+
+#+CAPTION: Protein transcription model data over time without light.
+#+NAME: fig:nolightfinal
+[[file:proteins_no_light.png]]
+
+#+CAPTION: Protein transcription model data over time with light introduction at a quarter of the experiment until three quarter.
+#+NAME: fig:proteinsfinal
+[[file:proteins.png]]
+
+** 
