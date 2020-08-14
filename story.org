@@ -43,17 +43,17 @@
 * Introduction
 Here all modeling steps for turning qualitative knowledge into a quantitative system dynamics model are made concrete using a running example. We will first elaborate on the example problem statement, followed by the goals to be achieved. We will then describe the system, and finally, provide the hypotheses to be answered by modeling.
 
-** Problem
+* Problem
 In this example, there is a group of four potato farmers noticing that their potato yield fluctuates significantly over the years. They have all invested in a greenhouse to have more control of the potato growing process. Using their greenhouses, however, they want to know more about the critical factors and how they can best control the environment to optimize potato yield.
 
-** Goal
+* Goal
 The farmers want to apply systems thinking to understand more about the dynamics of potato population growth. It is in their best interest to:
 
 1. Keep growth fluctuations low in order to have a steady income.
 2. Know what are the best circumstances to grow potatoes in order to optimize yield.
 3. Know what is the best timing to harvest.
 
-** System
+* System
 The farmers use greenhouses where they grow potato plants that need nutrients from the soil (-1.2) and a light source (+1). In the greenhouses, they have full control over the light. The number of potato plants downregulates itself as they compete for space and light (-3). Upon growing, the plants consume nutrients from the soil (-1,2). Furthermore, the ground receives fertilization from a worm population (+4) that eats (-1), and therefore are also drawn to  (+4) the potato plants. However, when the soil is too rich in nutrients, the worm population will decrease as too high levels of nutrients are toxic to the worms (-1). The worms furthermore also have a natural life cycle (i.e., birth (+4) and death (-4)). It is known that there is no causal relationship between the nutrients in the soil and light, just as there is no causal relationship from the worm population to the light source. This system is depicted in figure ref:fig:CLD in the form of an aCLD. Every causal relationship is annotated with its polarity, the intermediate variables, the source of information (a book represents literature and an agent figure represents information obtained from experts with the percentage of consensus between experts), and the functional form (1: Interaction term, 2: Exponential term, 3: Sigmoidal term, 4: Linear term). As we can see in figure ref:fig:CLD, only 25% of the experts think that the warmth of the light can affect the worm population, making this causal relationship hypothetical. Furthermore, both the polarity and functional form of this relationship is not known (??).
 
 
@@ -62,50 +62,111 @@ The farmers use greenhouses where they grow potato plants that need nutrients fr
 #+ATTR_LATEX: :width 0.75\linewidth :placement [t]
 [[file:network.png]]
 
-** Hypothesis
+* Hypothesis
 The amount of light and the number of worms in the soil are the key factors to regulate to lead to a steady and optimized potato yield.
 
 #+LATEX: \clearpage
-** Data
-The farmers decide to work together and agree to try and grow potatoes under similar conditions except for the strength of light. To keep things fair, they share the potato yield equally, so no single farmer has meager yield during the experiment. They tried to measure their potato population (potatoes per square meter / 10), the nutrient richness of the soil (mg/kg/10), and the number of worms in the ground per square meter daily to provide us with data. This data is presented in figure ref:fig:data with some descriptive statistics in table ref:tab:descr_data.
+
+* Data
+The farmers decide to work together and agree to try and grow potatoes under similar conditions except for the strength of light. To keep things fair, they share the potato yield equally, so no single farmer has meager yield during the experiment. They tried to measure their potato population (potatoes per square meter), the nutrient richness of the soil (mg/kg), and the number of worms in the ground per square meter daily to provide us with data that covers all variables in the system as defined in section 3a. The measurements are taken daily for 50 consecutive days, though the farmers have missed quite a few of these measurements which leads us to an average of 60% missing values. This data is presented in figure ref:fig:data with some descriptive statistics in table ref:tab:descr_data.
+
 
 #+CAPTION: Data of four different greenhouses over 50 time-units. Measurements include strength of light, potato yield, amount of nutrients in the soil, and the number of worm.
 #+NAME: fig:data
 #+ATTR_LATEX: :width 1\linewidth :placement [h]
-[[file:data.png]]
+[[file:4farmers.png]]
 
 #+CAPTION: Descriptive statistics of data gathered by the farmers.
 #+NAME: tab:descr_data
-#+ATTR_LATEX: :placement [h]
-|               | Greenhouse |    1 |    2 |    3 |    4 |
-|---------------+------------+------+------+------+------|
-| Potatoes      | Mean       | 0.44 | 0.52 | 0.60 | 0.71 |
-|               | Std        | 0.10 | 0.10 | 0.10 | 0.18 |
-|               | Min        | 0.18 | 0.30 | 0.39 | 0.30 |
-|               | Max        | 0.61 | 0.68 | 0.77 | 0.97 |
-|               | Missing    |  60% |  56% |  58% |  62% |
-|---------------+------------+------+------+------+------|
-| Nutrients     | Mean       | 0.54 | 0.45 | 0.53 | 0.48 |
-|               | Std        | 0.10 | 0.09 | 0.09 | 0.06 |
-|               | Min        | 0.38 | 0.26 | 0.39 | 0.39 |
-|               | Max        | 0.77 | 0.68 | 0.74 | 0.71 |
-|               | Missing    |  64% |  54% |  52% |  52% |
-|---------------+------------+------+------+------+------|
-| Worms         | Mean       | 0.56 | 0.70 | 0.74 | 0.97 |
-|               | Std        | 0.11 | 0.12 | 0.17 | 0.20 |
-|               | Min        | 0.35 | 0.54 | 0.41 | 0.64 |
-|               | Max        | 0.75 | 0.78 | 0.98 | 1.38 |
-|               | Missing    |  58% |  60% |  52% |  54% |
-|---------------+------------+------+------+------+------|
-| Lightstrength |            | 1.25 | 1.50 | 1.75 | 2.00 |
+#+ATTR_LATEX: :width 1\linewidth :placement [h]
+[[file:dataTable.png]]
 
 #+LATEX: \clearpage
-** Labeling the causal loop diagram
+
+* Labeling the causal loop diagram
+
+Labeling the aCLD revolves around identifying the types of variables. In our system, the variables of interest entail the number of potatoes, the soil nutrients, and the worm population size. These variables are measured over time and, for our purposes, roughly operate on the same timescale. As such, these three variables are stocks in our system. As for the flows, each stock has an inflow and an outflow. 
+Firstly, for potatoes, the in-flow represents the population growth rate that is defined as the effect of nutrient intake and photosynthesis. The outflow is the potato yield determined by the combined impact of self-competition and the worms eating the potatoes. 
+Secondly, for the worm population, the in-flow is represented by the rate at which new worms are coming into the population through birth and immigration (i.e., consisting of attraction to food and, possibly, the warmth provided by the lights). Light can be seen as an auxiliary, able to change in a short amount of time, as the farmers have full control over its intensity. Conversely, the outflow is represented by the rate at which worms leave the population through death (i.e., natural death or caused by toxicity of the soil nutrients) and emigration. Birth and natural mortality are constant as their natural rhythm does not change within a meaningful interval in the context of our use-case. 
+Lastly, for the soil nutrients, the in-flow is represented as the rate at which nutrient concentrations are restored through defecation of worms. The nutrient consumption by the potatoes represents its outflow.
+
 
 #+CAPTION: Network of scenario
 #+NAME: fig:network
 #+ATTR_LATEX: :width 1\linewidth :placement [h]
-[[file:image.png]]
+#+ATTR_ORG: :width 200
+[[file:nak_sf2.png]]
+
+* Equations
+
+Now that the blueprint of the model has been defined, it is time to turn the conceptual model into a computational model. The resulting SDM consists of a set of equations that drive the model. Although SDMs can have probabilistic components (Sterman, 2018), we will focus on implementing a set of difference equations based on the stock and flow diagram. These visually convey intuition better regarding the passing of time as opposed to differential equations. 
+
+It is good to realize that each causal relation, or set of interacting causal relationships (i.e., interaction terms), represents a term in a difference equation. Each difference equation represents a stock changing over time. To determine the functional form of the hypothetical, or unknown, relationships defined in the CLD, one can use several methods being described in section 2fiv. However, suppose the functional form cannot be found through these methods. In that case, it can be approached as an optimization problem, which means that these unknown terms need to be found (fitted) through the use of model selection methods. 
+
+Another important aspect is that parameters accompany each term. Intuitively, these parameters entail a certain weight to the relationship (e.g., light intensity might exert a much more significant effect on potato growth than nutrient uptake from the soil). These parameters, like the functional form, can sometimes be found in literature or found through expert knowledge. However, often they need to be fitted, making it an optimization issue. These optimization methods are covered in more detail in section XXX.
+
+To summarize, when all functional forms are determined, the equations can be expressed. Each stock in the system entails a difference equation, while each relation with said stock provides a term. These terms need to be parameterized by defining weights and initial values (Brailsford, 2008). 
+
+Time is managed in discrete steps where the time step, delta t, is chosen on the stocks' level. If delta t is smaller than the temporal scale a particular term operates in, it is multiplied by the ratio to account for this difference. For example, if the simulation operates on a temporal scale of one day, and the term operates on four days, it can be multiplied by 1/4 (Brailsford, 2008).
+
+In calculating the auxiliary variables, the order of updating the values in the system can also affect how these values develop. As these values depend on all the values connecting variables, they are to be updated synchronously. However, in dealing with stocks, the update order occurs asynchronously. This order is essential as they depend on the previous time-step of all connecting variables, and they can also have a logical order. In determining the update order, it is always necessary to place the variables into the context of reality and assess whether the order makes sense (e.g., biologically, physically).
+
+In SDMs, dimensional consistency between the units of the left- and right-hand side of each equation should be preserved to ensure that the model makes sense. Unit consistency can be accomplished partly by picking units for constants intelligently; however, these should still be reasonable (Forrester, 1994).
+
+** Example
+
+In terms of functional forms, the farmers, together with other experts from the agricultural sector, know of most links, but not all. Our case has three stocks in the system; potato population, soil nutrients, and worm population. This means that there is a total of three differential equations that need to be formed, each containing terms from its respective causal relationships. Here we will reason through the terms of the potato stock to gain intuition on how such a system might translate into a system of equations. Then we will provide the entire system based on our knowledge so far.
+
+*** Potatoes
+
+The potatoes stock consists of two terms contributing to the in-flow and two terms contributing to the out-flow. The effect of light and soil nutrients are responsible for the in-flow. Literature tells us both the polarity and functional form of the effect of light as it is an interaction term of potatoes and light where both need to be present. The parameter value is also found in the literature. The fact that this is an "AND" relationship (see section XXX (interaction terms)) makes it likely that the functional form is as follows:
+
+1.5 * p * light
+
+Here 1.5 is the parameter weight that precedes the stock variable value and is provided by the experts. The previous time step is used from the potato stock value times the light value. We do not know, however, the exact functional form of the effect of soil nutrients. The experts have reached a consensus that it must be an exponential interaction term but do not know the exact order of the exponential; this needs to be fitted later on. Given this information, the functional form as far as currently known is as follows:
+
+(1 * s**a_1) * (1 * p)
+
+The self-competition loop as a result of space and light competition only has a known polarity. The experts say it has a negative effect on the potato stock with an unknown parameter and functional form. This results in the following equation:
+
+-(a_2 * f1(p))
+
+The term is negative, but the value of a_2 is unknown, and the functional form (f1) also needs to be fitted at a later time. The potato loss due to worms, however, is entirely known by literature. Much like the influence of light, it is an interaction term that looks as follows:
+
+-(2 * w) * (1. * p)
+
+*** System of equations
+
+ When traversing through the entire system the set of equations (Wordt nog mooier gemaakt aan de hand van waar eindversie in geschreven wordt) are described as follows:
+
+#+BEGIN_SRC python
+  p_{t+1} = (1.5 * p) * light + # Influence of light on potato growth
+       (1 * s**a_1) * (1 * p) + # Influence of nutrients in the soil on potato growth
+       -(a_2 * f1(p)) + # Competition with themselves
+       -(2 * w) * (1. * p) # Potato loss due to worms
+
+  s_{t+1} = (0.3 * w) + # Worm contribution by feces to soil nutrients
+       -(1 * p**a_3) * (1 * s) + # Soil nutrient consumption from potatoes
+
+  w_{t+1} = (1.2 * p) + # Migration caused by potatoes
+       (0.1 * w) + # Worm birth
+       -(a_4 * w) + # Worm death
+       -(2 * s) * (1 * w) + # Toxic effect of too much nutrients on worm population
+       (-|+)(a_5 * f2(w, light)) # Attraction to the warmth of the light
+#+END_SRC
+
+* Optimization
+There were five parameters (a_n) and two functions (f_n) to be estimated  in the previous section. By assessing the two functions, we are effectively choosing a model that best fits the data (model selection). However, whenever a different function is tested, the parameters (a_n) should again be optimized for this new configuration. In this example we will try to build some extra intuition on both processes; optimization of functional form and optimization of parameter values. 
+
+** Functional form
+
+
+For further details on selecting sets of functional forms, we refer the reader to [[https://link.springer.com/chapter/10.1007/978-3-540-24650-3_18][Wang & Soule (2004)]].
+
+** Parameter estimation
+
+
+** Crap
 
 # In this chapter, we will make all modeling steps concrete by using a running example. In this example, we want to optimize potato yield from a plot of land through simulation of the system. The plot grows potato plants that need nutrients in the soil and a light source. The number of potato plants downregulates itself as they compete for space and light. Upon growing, the plants consume nutrients from the soil.
 
@@ -244,4 +305,5 @@ The farmers decide to work together and agree to try and grow potatoes under sim
 # #+ATTR_LaTeX: :width 0.49\textwidth :center
 # [[file:proteins.png]]
 # #+END_center
+** Questions
 
