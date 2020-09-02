@@ -156,15 +156,26 @@ The term is negative, but the value of a_2 is unknown, and the functional form (
 #+END_SRC
 
 * Optimization
-There were five parameters (a_n) and two functions (f_n) to be estimated  in the previous section. By assessing the two functions, we are effectively choosing a model that best fits the data (model selection). However, whenever a different function is tested, the parameters (a_n) should again be optimized for this new configuration. In this example we will try to build some extra intuition on both processes; optimization of functional form and optimization of parameter values. 
 
-** Functional form
+If our network was a recipe for delicious bread, the causal relationships are ingredients and parameters the amounts of each ingredient. As the chef, it is our job to find the best recipe and, in each try, improve the recipe. After each try, we taste the result (i.e., our cost function) and assess whether the recipe has improved. Outside of the recipe itself, we also need to assess the settings in the oven; these oven settings map to the hyperparameters of the optimization algorithm. Too high a temperature and the bread bakes too fast, resulting in bread that does not rise. The algorithm converges too fast to a local optimum, and not enough of the parameter space has been sampled. Too low a temperature and the bread will never bake, so we will never reach an optimum. Even though they are not part of the bread itself, these oven settings (i.e., hyperparameters) are an essential part of finding the best recipe as they can influence the result significantly. In this section, we will briefly elaborate on the notions of model selection (choosing the right ingredients), parameter estimation (estimating the right quantities of ingredients),  and that of cost functions (tasting the bread) in light of our example.
 
+In the example, there are five parameters (a_n) and two functions (f_n) to be estimated in the previous section. By assessing the two functions, we are effectively choosing a model that best fits the data (model selection). Whenever a different function is selected, the parameters (a_n) should be optimized for this new configuration. In this example, we will place both processes, optimization of the functional form (i.e., model selection) and optimizing parameter values, in a more practical light.
 
-For further details on selecting sets of functional forms, we refer the reader to [[https://link.springer.com/chapter/10.1007/978-3-540-24650-3_18][Wang & Soule (2004)]].
+** Model selection
+
+In our system, there is one function f1() that is unknown and needs to be fitted. In conjunction with the farmers, the experts have narrowed the possible set of functional forms down to two; linear and sigmoidal. Their reasoning for this was that self-competition increases linearly to the number of potatoes, so each added potato increases self-competition in the same way. Alternatively, potatoes barely compete with one another, until a critical point where potatoes start competing for space and light. Around this point, self-competition increases until it reaches an asymptotic maximum.
+
+For f2(), the attraction of worms towards the warmth of the light, the experts, and farmers are unsure whether there is a causal relationship at all. If there is, they do not know its functional form nor its parameter value or polarity. There is considerable uncertainty in this causal relationship, which can be reduced by declaring a broad set of possible functional forms and fitting them. However, this is a computationally challenging process, as each added functional form adds to the model space. By declaring a set of 3 possible functional forms for f2, the combined number of possible configurations to be tested would amount to 10 (the product of the number of possible configurations for each function plus the configuration without the hypothetical edge).
+
+Usually, the set of possible functional forms can be quite bigger, and how to choose and define this set is subject to a variety of nuances. For further details on selecting sets of functional forms, we refer the reader to [[https://link.springer.com/chapter/10.1007/978-3-540-24650-3_18][Wang & Soule (2004)]].
 
 ** Parameter estimation
 
+Parameters are not just numbers. It can be seen as a convergence of, for example, the importance of a variable, the absorption of a temporal difference between variables, an effect of unknown intermediate processes, and so forth. By thinking about parameters in such a manner, it also appears natural that a single "true" set of parameters is hard to find, or might not even exist. The parameters can differ slightly over time or can entail uncertainty from our perspective. That is why parameter values are often visualized as a distribution, where its variance relates to a type of uncertainty. For example, the Metropolis-Hastings algorithm is designed to converge towards a distribution that encodes the likelihood of a parameter being a particular value given the data on which we fit the cost function. Such distributions can also estimate the parameters in our example network. Each parameter (a_1 through a_n) has its own distribution where the top represents the maximum likelihood estimation (MLE). The ideas surrounding optimization algorithms and their cost functions still are the same as described earlier.  
+
+** Uncertainty propagation and sensitivity analysis
+
+** Validation: longitudinal (train/test) and cross-sectional data (validation statements)
 
 ** Crap
 
