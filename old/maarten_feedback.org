@@ -1,0 +1,45 @@
+Ik heb even snel naar de cruciale sectie gekeken. Het is inderdaad vrij lang, dus ik kan best nog een belangrijke sectie hebben gemist. Als dat zo is dan moet je me dit nog even laten weten dan kijk ik daar nog even naar. Hieronder wat gedachten. Ik hoop dat je er wat aan hebt!
+
+De paragraaf beginnende met `` Intuitively, estimating parameters can be understood as follows’’ kan denigrerend overkomen. In de psychometrie en de psychologische methodenleer bestaat een brede expertise in computationele statistiek. In een blad als Psychological Methods en Behavioral Research Methods mag je het best hebben over parameters, likelihoods, optimalisatie, etc.
+
+In het kader van een Bayesiaans paradigma voor schatten is het wat gek dat het algoritme in Sectie 2.5.2 niet Bayesiaans is, of niet als zodanig beschreven is. Volgens mij werkt dit in een Bayesiaans kader uit als posterior verwachting van verliesfuncties. Je zou ook naar model selectie kunnen kijken, als je meerdere modellen opvoert.
+
+Niet helemaal de vraag aan mij, maar volgens mij kan de paragraaf beginnende met “Optimization algorithms differ widely” weg. Ik ben het met Sacha eens dat het voor mij als lezer interessanter is om te weten wat je nu precies optimalizeert.
+
+Ik heb drie bedenkingen bij de paragraaf beginnende met ``A parameter is not just a number.’’:
+
+1)    Een Bayesiaan noemt de a priori verdeling van een parameter een verdeling van de ``prior degree of belief’; hoeveel waarde hecht de onderzoeker aan een specifieke waarde (of set/interval) van de parameter. In jullie geval lijkt ``degree of plausibility’’ o.i.d. goed te passen.
+
+2)    Het belangrijke onderscheid tussen een frequentist en een Bayesiaan is niet of ze wel of geen ware waarde van een parameter aannemen, maar hoe ze achter die waarde komen, en hoe je dus hun schatters mag interpreteren. Een Bayesiaan conditioneert op wat zij weet, en gebruikt het om haar overtuiging over een parameter te representeren in een posterior verdeling. (Dit kan een punt of set van punten zijn.) Een frequentist neemt aan dat haar schatter, als ze maar lang genoeg doorgaat, uiteindelijk convergeert op de ware waarde. (Dus de waarheid is een limiet.) Nu moet een frequentist wel aannemen dat er een ware waarde is, maar dit kan voor de Bayesiaan ook gelden. (In de limiet zijn frequentisten en Bayesianen het dan ook met elkaar eens.)
+
+3)    De zinsnede `` a single ‘true’ set of parameters is hard to find, or might not even exist’’ suggereert een identificatie probleem. Identificatie is een probleem dat onafhankelijk van een statistisch raamwerk bestaat (en ook niet opgelost wordt met de keuze voor het Bayesiaanse paradigma of een andere).
+
+In de frase ``The mode of such parameter distributions is the maximum a posteriori estimation (MAP)’’ moet de term “estimation” vervangen worden door “estimator” of “estimate”.
+
+Nu schrijf je hierover het volgende “which, intuitively, is the parameter set with the largest probability of fitting the data.” Dit klopt niet. Op zijn best is het de schatter waaromheen het kortste credible interval ligt, maar dan ook alleen als de posterior unimodaal is. Je zou kunnen zeggen dat het de meest plausibele waarde van de parameter is, a posteriori, of de waarde met de ``highest degree of beliefs”. Ook is de MAP geen set maar een vector.
+
+De rest van deze paragraaf vind ik wat raar in het licht van dit stuk. Een Bayesiaan schat de posterior verdeling, en niet alleen de MAP. Nu gebruikt zij de MAP wel voor praktische doeleinden, i.e., rapportage, maar voor predictie of inferentie gebruikt ze de gehele posterior. Nu schrijven jullie zelf over optimalizatie (ik neem even aan dat het dan gaat om de parameters alleen, en dan om de MAP schatter te produceren), maar dan zeg je daarna dat dit niet optimaal is. Ik suggereer om deze en de volgende paragraaf samen te voegen, en simpelweg te stellen dat voor praktische doeleinden (i.e., rapportage), de volledige posterior verdeling doorgaans wordt samengevat in een schatter voor locatie en spreiding (met de aantekening dat de verdeling dus wel unimodaal moet zijn). Voor locatie wordt doorgaans de MAP, de posterior gemiddelde en de posterior mediaan gebruikt. Voor spreiding de standaarddeviatie, centrale credible interval (rond de mediaan), of de highest posterior density interval. De laatste heeft mijn voorkeur.
+
+De term ``inverse uncertainty quantification’’ is mij wat vreemd. Als ik de complete posterior kan uitdrukken zonder simulatie dan is dat ook ``inverse uncertainty quantification’’, lijkt mij. Dus het gaat om het schatten of bepalen van de posterior verdeling. Voor de meeste problemen is het niet haalbaar dit analytisch te doen en gebruiken we Monte Carlo (MCMC) om deze te schatten. Dat is hier niet anders lijkt me.
+
+Voetnoot 1 voegt weinig toe.
+
+Sectie 2.5.5: Ik merk dat je in je schrijven het concept of de procedure vaak eerst introduceert van een optimizatie / ML standpunt en dan zegt dat dat niet de goed is en het beter Bayesiaans kan. Dit leest heel verwarrend. Dit gebeurde in de paragrafen hierboven ook al een paar keer. Waarom zet je deze sectie bv niet gewoon vanaf het begin op als een Bayesiaans model-selectie probleem? Je neemt hiermee meerdere modellen serieus, drukt de onzekerheid uit in de selectie van een specifiek model, en bovendien kun je ook nog over de modellen middelen (Bayesian model averaging). Dit zijn allemaal voordelen die je niet hebt met het eenzijdig selecteren (optimaliseren) van de model likelihood. En daarvoor heb je echt geen RJMCMC nodig. Ik heb het onlangs met variabele-selectie methoden gedaan bijvoorbeeld (zie https://psyarxiv.com/dg8yx/).
+
+Sectie 2.5.6: In een Bayesiaans kader kun je dit oplossen in de prior verdeling over de model ruimte. Het artikel van Berger en Scott (doi: 10.1214/10-AOS792) is bv interessant in deze, maar ook een recent overzicht van Consonni en collega’s (doi: 10.1214/18-BA1103, specifiek Sectie 3.6, en Sectie 4, maar Secties 3.1-3.4 zijn ook interessant om even door te scannen).
+
+Sectie 2.5.7: Dit heb ik nog even schuin doorgekeken, want ik heb weinig tijd meer, en ik dacht dat bovenstaande secties het belangrijkst waren. Ik merkte hier nog wel het stukje over MH op.
+
+(1)   De huidige beschrijving is onduidelijk. Het Metropolis algoritme zet een Markov keten op dat convergeert naar de invariante verdeling. De invariante verdeling kan van alles zijn, de gebruiker bepaalt dit zelf, en is in de Bayesiaanse context de posterior verdeling. Veel psychologen kennen alleen deze toepassing en noemen het daarom een Bayesiaans algoritme, maar dat is natuurlijk incorrect. De eerste toepassing van het algoritme was juist het simuleren van data uit een kansverdeling (het Ising model). De Gibbs sampler heeft hetzelfde probleem (en dezelfde oorsprong). Ik vermoed dat je het Metropolis algoritme hier bedoelt in de laatste hoedanigheid. Klopt dat?
+
+(2)   De invariante verdeling kan niet de likelihood zijn, want de likelihood is per definitie geen kansverdeling (hoewel kansverdelingen wel gebruikt worden om de likelihood te specificeren). De parameter is namelijk alleen een toevalsvariabele als je er een prior verdeling aan toekent. De invariante verdeling kan dus wel de kansverdeling zijn die gebruikt wordt om de likelihood te specificeren. In dit kader wil ik je ook nog even wijzen op Approximate Bayesian Computation (ABC), wat wellicht interessant is voor je (ook https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0169787 stoelt op ditzelfde idee).
+
+(3)   Top van de parameter verdeling is de MLE schrijf je. Is het dan een bootstrap wat je doet? Even verduidelijken. Dan is er ook weinig Bayesiaans meer over.
+
+(4) Voor specifieke toepassingen gebruik je specifieke Metropolis algoritmes. Er zijn er namelijk heel veel. Bijvoorbeeld RJMCMC, Metropolis, Metropolis-Hastings, Single-Variable Exchange zijn allemaal Meropolis algoritmes. Welke gebruik je en waarom? Hoe specificeer je de proposal verdeling (cruciaal) en evalueer je de efficientie van de keten?
+
+“(inverse) likelihood”  bedoel je posterior verdeling?
+
+
+
+Ik zie verder nog wel wat dingen waarvan ik denk dat een volledig Bayesiaans kader je echt nog wat op kan leveren. Maar dat is beyond the scope of this paper. Hebben we het nog een keer over. Mocht het onduidelijk zijn wat ik schreef kunnen we op een later moment zoom-en. En als je input over specifiek stukje nodig hebt dan kijk ik graag mee.

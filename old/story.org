@@ -173,11 +173,65 @@ Usually, the set of possible functional forms can be quite bigger, and how to ch
 
 Parameters are not just numbers. It can be seen as a convergence of, for example, the importance of a variable, the absorption of a temporal difference between variables, an effect of unknown intermediate processes, and so forth. By thinking about parameters in such a manner, it also appears natural that a single "true" set of parameters is hard to find, or might not even exist. The parameters can differ slightly over time or can entail uncertainty from our perspective. That is why parameter values are often visualized as a distribution, where its variance relates to a type of uncertainty. For example, the Metropolis-Hastings algorithm is designed to converge towards a distribution that encodes the likelihood of a parameter being a particular value given the data on which we fit the cost function. Such distributions can also estimate the parameters in our example network. Each parameter (a_1 through a_n) has its own distribution where the top represents the maximum likelihood estimation (MLE). The ideas surrounding optimization algorithms and their cost functions still are the same as described earlier.  
 
-** Uncertainty propagation and sensitivity analysis
+* Uncertainty propagation and sensitivity analysis
 
-** Validation: longitudinal (train/test) and cross-sectional data (validation statements)
+There are two primary sources of uncertainty in our system. The first is caused by the rudimentary measuring methods employed by the farmers. These measuring methods simply consist of counting the number of hits in a square meter, doing this multiple times, and averaging over these small land plots. Utilizing better ways of measurement could reduce this type of uncertainty. 
 
-** Crap
+The second source of uncertainty is found in the unknown parameters and functions forms. We have five unknown parameters and two unknown functional forms in our system. There is a high uncertainty pertaining to the causal relationship represented by worms being attracted to warmth. This section will work out a selected model that leaves out this causal relationship to diminish its complexity, reducing the number of unknown parameters to 4 and unknown functions to 1. Furthermore, to further minimize dimensionality, worm death is assumed to be the same as worm birth (i.e., a parameter value of 0.1). Also, the parameters of the influence of potatoes consuming nutrients from the soil and nutrients being consumed from the soil by the potatoes are assumed to be the same (i.e., $a_1 = a_3$) as they effectively are the same process but inversed. The dimensionality of the parameters is hereby reduced to two parameters, while the functional form consists of a single unknown. Usually, this functional form would be fitted. For brevity, we will only consider a sigmoidal functional form for $f_1$ as self-competition amongst potatoes only goes up fast when space and sunlight reach carrying capacity.
+
+These two sources of uncertainty propagate through our simulation. For example, the uncertainty within the measuring method affects the cost function's effectivity, as the data to which the simulation is compared contains error. Using the metropolis-hastings algorithm, we can obtain parameter distributions to visualize the probability of a parameter being a certain value. These distributions are used to quantify uncertainty. In figure ref:fig:a13 (parameter distribution $a_1$ and $a_3$) and ref:fig:a2 (parameter distribution $a_2$)we see such distributions. As we can see, both figures depict multiple parameter values that have a non-zero likelihood and thus propagate uncertainty. Parameters $a_1$ and $a_3$ show a maximum likelihood estimated at 1.55, and parameter $a_2$ has its maximum likelihood at 0.85. However, it appears that this distribution is bimodal (i.e., two values have a high likelihood).   
+
+#+CAPTION: 
+#+NAME: fig:a13
+#+ATTR_LATEX: :width 1\linewidth :placement [h]
+#+ATTR_ORG: :width 200
+[[file:a1_3.png]]
+
+#+CAPTION: Network of scenario
+#+NAME: fig:a2
+#+ATTR_LATEX: :width 1\linewidth :placement [h]
+#+ATTR_ORG: :width 200
+[[file:a2.png]]
+
+Using the maximum likelihood estimations, we end up with the most probable system. This system is portrayed in figure ref:fig:fit. The colored area represents the area covered by the parameters suggested in figure ref:fig:a13 and ref:fig:a2. Here we can see that worms appear to be most sensitive regarding changes within these parameters. Nutrients cover the smallest area and are therefore the least sensitive to changes in the parameters.
+
+#+CAPTION: Network of scenario
+#+NAME: fig:fit
+#+ATTR_LATEX: :width 1\linewidth :placement [h]
+#+ATTR_ORG: :width 200
+[[file:simdata.png]]
+
+* Validation: longitudinal (train/test) and cross-sectional data (validation statements)
+
+In the previous section, we used the metropolis-hastings algorithm to get an MLE for the parameters, and we made some assumptions to simplify our model. However, a split has not been done in the data that we used to feed the cost-function to determine how well the simulation fits the data. Data is usually split to assess the generalizability of the model. 
+
+In our example, we need to know if the model can also predict other farms' data. Figure ref:fig:split_data shows that the data points have been split into two parts. One part is depicted by circles (D1), and one part is represented by hollow diamonds (D2). The ratio to which this split is done is such that D1 gets 60% of the data points and D2 the leftover 40% (another conventional ratio would be 80/20). 
+
+The data from D1 is used as an input in the metropolis-hastings algorithm with a resulting MLE value of 1.5 for $a_1$ and $a_3$ and 0.85 for $a_2$. These parameters lead to the dynamics shown by the line in figure ref:fig:split_data.
+
+To test the model's accuracy and generalizability, we can use the scores from the cost function from both the distance of the MLE dynamics to D1 and D2. These scores' precise values depend entirely on the utilized score function, which has to be taken into account in terms of interpretation. By dividing the cost values to D1 with D2, $\frac{C(D_1)}{C(D_2)}$, we get a measure of accuracy. The closer to 1 this value is, the better the model has generalized towards the second subset of the data. If the accuracy is much lower than 1, it might be that we overfitted the data, while we might have under-fitted if the accuracy was higher than 1. In our example, our accuracy amounted to 0.91, which indicates that the model generalized well between D1 and D2 though it could be slightly overfitted.
+
+#+CAPTION: Network of scenario
+#+NAME: fig:split_data
+#+ATTR_LATEX: :width 1\linewidth :placement [h]
+#+ATTR_ORG: :width 200
+[[file:MLE_split_data.png]]
+
+Now that we know that we can simulate a single farm that employs a light strength of 1.5, we need to see if the model generalizes to other farms. I.e., can the data of the other farms be sufficiently approximated by the same model by just changing the light strength parameter?
+
+Figure ref:lights:fit shows the model dynamics under each of the four different light strengths utilized by the farms. We see the cost function scores (the mean absolute difference) and the light strength in the title. Notice that the figure with light strength 1.5 has the same dynamics as figure ref:fig:split_data as this farm is used to make the model.
+
+By looking at the different dynamics with the four farms, we can tell that the model seems to generalize well as data points are well predicted. It does seem, however, then when the light strength hits around the value of two, the system is oscillating at a higher frequency and amplitude, causing the model to act more chaotic and fit the data less well. This can indicate that the oscillatory properties posed in the introduction of our example might lie in this area.
+
+#+CAPTION: Network of scenario
+#+NAME: fig:lights_fit
+#+ATTR_LATEX: :width 1\linewidth :placement [h]
+#+ATTR_ORG: :width 200
+[[file:light_fit.png]]
+
+Now that we have gained confidence in our model, we can try out scenarios and test hypotheses. We can, for example, tune the parameter regarding the rate of death in worms to test whether this reduces oscillatory behavior without reducing yield. By being extra thorough in the modeling phases described in this paper, we can increase our confidence in our model, and, by extension, our conclusions drawn from experimenting with it.
+
+* Crap
 
 # In this chapter, we will make all modeling steps concrete by using a running example. In this example, we want to optimize potato yield from a plot of land through simulation of the system. The plot grows potato plants that need nutrients in the soil and a light source. The number of potato plants downregulates itself as they compete for space and light. Upon growing, the plants consume nutrients from the soil.
 
